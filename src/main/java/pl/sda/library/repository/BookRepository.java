@@ -34,10 +34,11 @@ public class BookRepository {
     }
 
     public Optional<Book> rentBook(int id, LocalDate dateOfReturn) {
-                Optional<Book> foundBook = books.stream()
-                .filter(book -> book.getId()==id)
+        Optional<Book> foundBook = books.stream()
+                .filter(book -> book.getId() == id)
+                .filter(book -> book.getDateOfReturn()== null)
                 .findAny();
-                foundBook.ifPresent(book -> book.setDateOfReturn(dateOfReturn));
+        foundBook.ifPresent(book -> book.setDateOfReturn(dateOfReturn));
         return foundBook;
     }
 
@@ -46,10 +47,19 @@ public class BookRepository {
     }
 
     public int generateId() {
-        return books.size()+1;
+        return books.size() + 1;
     }
 
     public void removeBook(int id) {
         books.stream().filter(book -> book.getId() == id).findAny().ifPresent(book -> books.remove(book));
+    }
+
+    public Optional<Book> returnBook(int id) {
+        Optional<Book> bookOptional = books.stream()
+                .filter(book -> book.getId() == id)
+                .filter(book -> book.getDateOfReturn() != null)
+                .findAny();
+        bookOptional.ifPresent(book -> book.setDateOfReturn(null));
+        return bookOptional;
     }
 }

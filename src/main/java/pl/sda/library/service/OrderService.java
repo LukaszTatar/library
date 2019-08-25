@@ -37,4 +37,8 @@ public class OrderService {
     public void removeBook(int id) {
         bookRepository.removeBook(id);
     }
+
+    public Optional<Book> returnBook(int id) {
+        return bookRepository.returnBook(id);
+    }
 }

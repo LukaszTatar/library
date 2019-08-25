@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sda.library.model.Book;
 import pl.sda.library.service.OrderService;
-
-import java.security.PublicKey;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,6 +43,15 @@ public class BookController {
     @DeleteMapping("book/remove/{id}")
     public void removeBook(@PathVariable int id) {
         orderService.removeBook(id);
+    }
+
+    @GetMapping(value = "/book/return/{id}", produces = "application/json")
+    public ResponseEntity<Book> returnBook(@PathVariable int id) {
+        Optional<Book> book = orderService.returnBook(id);
+        if (book.isPresent()) {
+            return ResponseEntity.ok(book.get());
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }
